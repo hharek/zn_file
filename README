@@ -1,0 +1,23 @@
+Class for php to work with files.
+
+Features:
+- relative path
+- recursive copy, move, delete, chmod, size
+- the name of the method as a command in unix
+- chroot
+
+REQUIREMENTS:
+- PHP 5.2 and up.
+
+-------------------------------------------------------------------------------------
+
+Класс на PHP для работы с файлами.
+
+Особенности:
+- Поддержка относительных путей
+- Рекурсивное копирование, перемещение, удаление, наложение прав, вычисление размеров
+- Наименование методов соответствуют командам в UNIX
+- Программный chroot
+
+Требования:
+- PHP 5.2 и выше.
