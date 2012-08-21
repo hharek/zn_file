@@ -7,7 +7,7 @@
  * @author		Sergeev Denis <hharek@yandex.ru>
  * @copyright	2011 Sergeev Denis
  * @license		https://github.com/hharek/zn_file/wiki/MIT-License MIT License
- * @version		0.1.1
+ * @version		0.1.2
  * @link		https://github.com/hharek/zn_file/
  */
 class ZN_File
@@ -36,7 +36,7 @@ class ZN_File
 	public function __construct($path = "/")
 	{
 		$path = trim($path);
-		if (empty($path))
+		if (mb_strlen($path, "UTF-8") < 1)
 		{
 			throw new Exception("Корневая папка не задана.", 11);
 		}
@@ -179,12 +179,12 @@ class ZN_File
 			throw new Exception("Тип \"" . func_get_arg(1) . "\" задан неверно. Необходимо указать: (all|file|dir).", 31);
 		}
 
-		if ($type != "file" and !empty($ext))
+		if ($type != "file" and mb_strlen($ext, "UTF-8") > 0)
 		{
 			throw new Exception("Расширение можно задать только для файлов", 32);
 		}
 
-		if (!empty($ext) and !preg_match("#^[a-zA-Z0-9]{1,5}$#isu", $ext))
+		if (mb_strlen($ext, "UTF-8") > 0 and !preg_match("#^[a-zA-Z0-9]{1,5}$#isu", $ext))
 		{
 			throw new Exception("Расширение \"" . func_get_arg(2) . "\" задано неверно", 33);
 		}
@@ -563,7 +563,7 @@ class ZN_File
 	 * @param string $dest
 	 * @return bool
 	 */
-	public function download($source, $dest=null)
+	public function download($source, $dest="")
 	{
 		/* Проверка */
 		$source = $this->_normalize_path($source);
@@ -574,7 +574,7 @@ class ZN_File
 			throw new Exception("Файла \"" . func_get_arg(0) . "\" не существует.", 121);
 		}
 
-		if (!empty($dest))
+		if (mb_strlen($dest, "UTF-8") > 0)
 		{
 			$dest = trim($dest);
 			if (mb_substr($dest, 0, 1, "UTF-8") != "/")
@@ -592,7 +592,7 @@ class ZN_File
 		}
 
 		/* Скачать */
-		if (empty($dest))
+		if (mb_strlen($dest, "UTF-8") < 1)
 		{
 			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"" . basename($source) . "\"");
@@ -642,7 +642,7 @@ class ZN_File
 	 * @param string $zip_file
 	 * @return bool
 	 */
-	public function zip($paths, $file_name=null, $zip_file=null)
+	public function zip($paths, $file_name="", $zip_file="")
 	{
 		/* Проверка */
 		if (empty($paths))
@@ -687,7 +687,7 @@ class ZN_File
 		}
 
 		/* filename */
-		if (empty($file_name))
+		if (mb_strlen($file_name, "UTF-8") < 1)
 		{
 			$file_name = "default.zip";
 		}
@@ -701,7 +701,7 @@ class ZN_File
 		$file_name = basename($file_name);
 
 		/* zip_file */
-		if (!is_null($zip_file))
+		if (mb_strlen($zip_file, "UTF-8") > 0)
 		{
 			$zip_file = trim($zip_file);
 			if (mb_substr($zip_file, 0, 1, "UTF-8") != "/")
@@ -747,7 +747,7 @@ class ZN_File
 
 		/* Выдать */
 		$func_args = func_get_args();
-		if (empty($func_args[2]))
+		if (mb_strlen($func_args[2], "UTF-8") < 1)
 		{
 			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$file_name}\"");
@@ -779,7 +779,7 @@ class ZN_File
 
 		/* Пустая строка */
 		$path = trim($path);
-		if (empty($path))
+		if (mb_strlen($path, "UTF-8") < 1)
 		{
 			throw new Exception("Путь задан неверно. Пустая строка.", 141);
 		}
@@ -842,7 +842,7 @@ class ZN_File
 
 			/* Строка с начальными или конечными пробелами */
 			$strlen = mb_strlen($val, "UTF-8");
-			$strlen_trim = mb_strlen($val, "UTF-8");
+			$strlen_trim = mb_strlen(trim($val), "UTF-8");
 			if ($strlen != $strlen_trim)
 			{
 				throw new Exception("Путь \"" . func_get_arg(0) . "\" задан неверно. Пробелы в начале или в конце имени файла.", 147);
@@ -850,7 +850,7 @@ class ZN_File
 
 			/* Не указано имя файла */
 			$val_trim = trim($val);
-			if (empty($val_trim))
+			if (mb_strlen($val_trim, "UTF-8") < 1)
 			{
 				throw new Exception("Путь \"" . func_get_arg(0) . "\" задан неверно. Не задано имя файла.", 148);
 			}
